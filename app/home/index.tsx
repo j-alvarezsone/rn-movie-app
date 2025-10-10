@@ -1,11 +1,12 @@
+import { movieQueries } from '@/core/queries';
 import MainSlideShow from '@/presentation/components/movies/MainSlideShow';
-import { useMovies } from '@/presentation/hooks/useMovies';
+import { useQuery } from '@tanstack/react-query';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
   const safeArea = useSafeAreaInsets();
-  const { isLoading, data } = useMovies();
+  const { isLoading, data } = useQuery(movieQueries.nowPlaying());
 
   if (isLoading) {
     return (
