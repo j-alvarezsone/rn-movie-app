@@ -13,7 +13,7 @@ const MainSlideShow = ({ movies }: Props) => {
   const width = useWindowDimensions().width;
 
   return (
-    <View className='h-[15.625rem] w-full'>
+    <View className='h-[250px] w-full'>
       <Carousel
         ref={ref}
         data={movies}
