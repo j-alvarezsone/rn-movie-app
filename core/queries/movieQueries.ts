@@ -4,6 +4,13 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { topRatedMoviesAction } from '../actions/movies/topRated.action';
 import { upcomingMoviesAction } from '../actions/movies/upcoming.action.ts';
 
+// Helper function for pagination logic
+const getNextPageParam = <T>(lastPage: T[], allPages: T[][]) => {
+  if (lastPage.length === 0) return undefined;
+
+  return allPages.length + 1;
+};
+
 export const movieQueries = {
   nowPlaying: () =>
     queryOptions({
@@ -22,10 +29,7 @@ export const movieQueries = {
       queryKey: ['movies', 'topRated'],
       initialPageParam: 1,
       queryFn: ({ pageParam }) => topRatedMoviesAction({ page: pageParam }),
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.length === 0) return;
-        return allPages.length + 1;
-      },
+      getNextPageParam,
       staleTime: 1000 * 60 * 5,
     }),
   upcoming: () =>
@@ -33,10 +37,7 @@ export const movieQueries = {
       queryKey: ['movies', 'upcoming'],
       initialPageParam: 1,
       queryFn: ({ pageParam }) => upcomingMoviesAction({ page: pageParam }),
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.length === 0) return;
-        return allPages.length + 1;
-      },
+      getNextPageParam,
       staleTime: 1000 * 60 * 5,
     }),
 };
