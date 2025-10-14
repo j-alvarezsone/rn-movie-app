@@ -29,9 +29,14 @@ export const movieQueries = {
       staleTime: 1000 * 60 * 5,
     }),
   upcoming: () =>
-    queryOptions({
+    infiniteQueryOptions({
       queryKey: ['movies', 'upcoming'],
-      queryFn: upcomingMoviesAction,
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) => upcomingMoviesAction({ page: pageParam }),
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.length === 0) return;
+        return allPages.length + 1;
+      },
       staleTime: 1000 * 60 * 5,
     }),
 };

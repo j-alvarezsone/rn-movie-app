@@ -12,9 +12,13 @@ const HomeScreen = () => {
   const {
     isLoading: isLoadingTopRated,
     data: topRatedMovies,
-    fetchNextPage,
+    fetchNextPage: topRatedMoviesFetchNextPage,
   } = useInfiniteQuery(movieQueries.topRated());
-  const { isLoading: isLoadingUpcoming, data: upcomingMovies } = useQuery(movieQueries.upcoming());
+  const {
+    isLoading: isLoadingUpcoming,
+    data: upcomingMovies,
+    fetchNextPage: upcomingMoviesFetchNextPage,
+  } = useInfiniteQuery(movieQueries.upcoming());
 
   if (isLoading || isLoadingPopular || isLoadingTopRated || isLoadingUpcoming) {
     return (
@@ -36,10 +40,15 @@ const HomeScreen = () => {
           className='mb-5'
           title='Top Rated'
           movies={topRatedMovies?.pages.flat() ?? []}
-          loadNextPage={fetchNextPage}
+          loadNextPage={topRatedMoviesFetchNextPage}
         />
         {/* Upcoming */}
-        <MovieHorizontalList className='mb-5' title='Upcoming' movies={upcomingMovies ?? []} />
+        <MovieHorizontalList
+          className='mb-5'
+          title='Upcoming'
+          movies={upcomingMovies?.pages.flat() ?? []}
+          loadNextPage={upcomingMoviesFetchNextPage}
+        />
       </View>
     </ScrollView>
   );
