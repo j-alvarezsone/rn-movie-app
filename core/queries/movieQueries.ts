@@ -1,6 +1,6 @@
 import { nowPlayingAction } from '@/core/actions/movies/now-playing.action';
 import { popularMoviesAction } from '@/core/actions/movies/popular.action';
-import { queryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { topRatedMoviesAction } from '../actions/movies/topRated.action';
 import { upcomingMoviesAction } from '../actions/movies/upcoming.action.ts';
 
@@ -18,9 +18,14 @@ export const movieQueries = {
       staleTime: 1000 * 60 * 5,
     }),
   topRated: () =>
-    queryOptions({
+    infiniteQueryOptions({
       queryKey: ['movies', 'topRated'],
-      queryFn: topRatedMoviesAction,
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) => topRatedMoviesAction({ page: pageParam }),
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.length === 0) return;
+        return allPages.length + 1;
+      },
       staleTime: 1000 * 60 * 5,
     }),
   upcoming: () =>

@@ -1,7 +1,7 @@
 import { movieQueries } from '@/core/queries';
 import MainSlideShow from '@/presentation/components/movies/MainSlideShow';
 import MovieHorizontalList from '@/presentation/components/movies/MovieHorizontalList';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -9,7 +9,11 @@ const HomeScreen = () => {
   const safeArea = useSafeAreaInsets();
   const { isLoading, data } = useQuery(movieQueries.nowPlaying());
   const { isLoading: isLoadingPopular, data: popularMovies } = useQuery(movieQueries.popular());
-  const { isLoading: isLoadingTopRated, data: topRatedMovies } = useQuery(movieQueries.topRated());
+  const {
+    isLoading: isLoadingTopRated,
+    data: topRatedMovies,
+    fetchNextPage,
+  } = useInfiniteQuery(movieQueries.topRated());
   const { isLoading: isLoadingUpcoming, data: upcomingMovies } = useQuery(movieQueries.upcoming());
 
   if (isLoading || isLoadingPopular || isLoadingTopRated || isLoadingUpcoming) {
@@ -28,7 +32,12 @@ const HomeScreen = () => {
         {/* Poular */}
         <MovieHorizontalList className='mb-5' title='Popular' movies={popularMovies ?? []} />
         {/* Top Rated */}
-        <MovieHorizontalList className='mb-5' title='Top Rated' movies={topRatedMovies ?? []} />
+        <MovieHorizontalList
+          className='mb-5'
+          title='Top Rated'
+          movies={topRatedMovies?.pages.flat() ?? []}
+          loadNextPage={fetchNextPage}
+        />
         {/* Upcoming */}
         <MovieHorizontalList className='mb-5' title='Upcoming' movies={upcomingMovies ?? []} />
       </View>
