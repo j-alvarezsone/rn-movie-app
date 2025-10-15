@@ -38,7 +38,7 @@ const MovieHorizontalList = ({ title, movies, className = '', loadNextPage }: Pr
         showsHorizontalScrollIndicator={false}
         data={movies}
         keyExtractor={(item, i) => `${item.id}-${i}`}
-        renderItem={({ item }) => <MoviePoster poster={item.poster} smallPoster />}
+        renderItem={({ item }) => <MoviePoster id={item.id} poster={item.poster} smallPoster />}
         onScroll={onScroll}
       />
     </View>
