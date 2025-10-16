@@ -1,4 +1,5 @@
 import { movieQuery } from '@/core/queries/movieQuery';
+import MovieHeader from '@/presentation/components/movie/MovieHeader';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
@@ -18,7 +19,7 @@ const MovieScreen = () => {
   }
   return (
     <ScrollView>
-      <Text>{data?.title}</Text>
+      <MovieHeader originalTitle={data?.originalTitle || ''} poster={data?.poster || ''} title={data?.title || ''} />
     </ScrollView>
   );
 };
